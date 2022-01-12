@@ -10,22 +10,26 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 class OrderControllerTest {
 
 	private TestRestTemplate testRestTemplate;
+
+	@LocalServerPort
+	private int port;
 
 	@Autowired
 	private MockMvc mockMvc;
 
 	@BeforeEach
 	void before() {
-		testRestTemplate = new TestRestTemplate(new RestTemplateBuilder().rootUri("http://localhost:8080"));
+		testRestTemplate = new TestRestTemplate(new RestTemplateBuilder().rootUri("http://localhost:" + port));
 	}
 
 	@Test
