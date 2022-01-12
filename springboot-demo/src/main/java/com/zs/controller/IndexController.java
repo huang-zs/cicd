@@ -1,57 +1,82 @@
 package com.zs.controller;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 常见代码审查用例
+ * 
+ * @author Administrator
+ *
+ */
 @RestController
 public class IndexController {
 
+	private static final Logger log = LoggerFactory.getLogger(IndexController.class);
+
 	@RequestMapping("t1")
-	public String t1() {
+	public void t1() {
 		int i = 1 / 0;
-		return "" + i;
+		log.info("{}", i);
 	}
 
 	/**
-	 * 测试e.printStackTrace();
+	 * e.printStackTrace();
 	 * 
 	 * @return
 	 */
 	@RequestMapping("t2")
-	public String t2() {
-		HashMap<String, String> hashMap = new HashMap<>();
+	public void t2() {
 		try {
-			hashMap.get("null").length();
-		} catch (Exception e) {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		return "t2";
 	}
 
 	/**
-	 * 测试null校验
+	 * null
 	 * 
 	 * @return
 	 */
 	@RequestMapping("t3")
-	public String t3() {
-		HashMap<String, String> hashMap = new HashMap<>();
-		String string = hashMap.get("null");
-		string.length();
-		return "t2";
+	public void t3() {
+		String string = null;
+		int length = string.length();
+		log.info("{}", length);
 	}
 
 	/**
-	 * 测试没使用的变量
+	 * 没使用的变量
 	 * 
 	 * @return
 	 */
 	@RequestMapping("t4")
-	public String t4() {
-		HashMap<String, String> hashMap = new HashMap<>();
-		return "t4";
+	public void t4() {
+		String s = "";
+	}
+
+	/**
+	 * 异常没关流
+	 * 
+	 * @return
+	 */
+	@RequestMapping("t5")
+	public void t5() {
+		try {
+			FileOutputStream fileOutputStream = new FileOutputStream("a.txt");
+			fileOutputStream.write(1);
+			fileOutputStream.close();
+		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
+		}
 	}
 }
